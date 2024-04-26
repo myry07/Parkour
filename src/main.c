@@ -131,10 +131,7 @@ void init() {
     }
 
     //设置字体
-    font = TTF_OpenFont("font.ttf", 64);
-    SDL_Color color = {0, 0, 255};
-    message = TTF_RenderText_Solid(font, "put your text here", color);
-    t_message = SDL_CreateTextureFromSurface(game.renderer, message);
+    font = TTF_OpenFont("/Users/myry/SDL2_Tutorials/32_SDLMixer/assets/fonts/8bitOperatorPlus8-Regular.ttf", 64);
 
     // 初始化界面
     interface.img = IMG_Load("/Users/myry/Documents/MyCProject/Parkour/resource/interface.png");
@@ -239,7 +236,14 @@ void drawBg() {
 }
 
 void drawScore() {
-    SDL_Rect r0 = {1000, 100, 100, 100};
+    char score_text[20];
+    sprintf(score_text, "Score: %d", win.score); // 将得分转换为字符串
+
+    SDL_Color color = {255, 255, 255};
+    message = TTF_RenderText_Blended(font, score_text, color); // 使用 score_text 替换 "test: %d"
+    t_message = SDL_CreateTextureFromSurface(game.renderer, message);
+
+    SDL_Rect r0 = {900, 50, 100, 20};
     SDL_RenderCopy(game.renderer, t_message, NULL, &r0);
 }
 
@@ -377,7 +381,7 @@ void move() {
         }
     }
 
-    if (win.score >= 20) {
+    if (win.score >= 30) {
         win.isWin = true;
         hero.isLive = false;
     }
@@ -393,11 +397,11 @@ void jump() {
 
     if (hero.jumpState) {
         hero.y -= JUMP_FORCE;
-        hero.x += 2;
+        hero.x += 1;
     }
 
     if (hero.y > 300 && hero.y < y) {
-        hero.x += 2;
+        hero.x += 1;
     }
 
     if (hero.x != 300) {
@@ -500,9 +504,8 @@ void event_loop() {
     }
 }
 
-
 int main() {
-    srand(time(NULL));//设置随机种子
+    srand(time(NULL));//随机
     init();
     event_loop();
     deinit();
